@@ -1,0 +1,44 @@
+#!/bin/sh
+
+### BEGIN INIT INFO
+# Provides:          move_to_nas
+# Required-Start:    hostname $local_fs
+# Required-Stop:
+# Should-Start:
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: Start/stop move_to_nas.
+# Description:       This script starts/stops move_to_nas.
+### END INIT INFO
+
+PATH=/sbin:/usr/sbin:/bin:/usr/bin
+. /lib/init/vars.sh
+
+
+res=0
+
+case "$1" in
+  start)
+        /home/pi/share/pic/move_to_nas
+        ;;
+
+  restart|force-reload)
+        $0 stop
+        sleep 1
+        $0 start
+        ;;
+
+  stop)
+        kill `ps -ef | grep '/home/pi/share/pic/move_to_nas' | grep -v grep | awk '{print $2}'`
+        ;;
+
+  status)
+        ;;
+
+  *)
+        echo "Usage: move_to_nas [start|stop|status]" >&2
+        res=3
+        ;;
+esac
+
+exit $res
